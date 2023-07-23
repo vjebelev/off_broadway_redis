@@ -43,7 +43,7 @@ Add `:off_broadway_redis` to the list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:off_broadway_redis, "~> 0.4.3"}
+    {:off_broadway_redis, "~> 0.5.0"}
   ]
 end
 ```
@@ -55,15 +55,13 @@ Configure Broadway with one or more producers using `OffBroadway.Redis.Producer`
 ```elixir
 Broadway.start_link(MyBroadway,
   name: MyBroadway,
-  producers: [
-    default: [
-      module: {
-        OffBroadway.Redis.Producer,
-        redis_instance: :some_redis_instance,
-        list_name: "some_list",
-        working_list_name: "some_list_processing"
-      }
-    ]
+  producer: [
+    module: {
+      OffBroadway.Redis.Producer,
+      redis_instance: :some_redis_instance,
+      list_name: "some_list",
+      working_list_name: "some_list_processing"
+    }
   ]
 )
 ```

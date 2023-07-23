@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5.0 (2023-07-22)
+* Upgrade to Broadway v1.0.0
+* Upgrade to Redix v1.2.0
+
 ## v0.4.2 (2020-04-03)
 
 * Upgrade to Broadway v0.6.0

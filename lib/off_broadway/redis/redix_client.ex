@@ -23,13 +23,15 @@ defmodule OffBroadway.Redis.RedixClient do
          {:ok, working_list_name} <- validate(opts, :working_list_name),
          {:ok, receive_messages_opts} <- validate_receive_messages_opts(opts),
          {:ok, config} <- validate(opts, :config, []) do
-      ack_ref =
-        Broadway.TermStorage.put(%{
-          redis_instance: redis_instance,
-          list_name: list_name,
-          working_list_name: working_list_name,
-          config: config
-        })
+
+      ack_ref = make_ref()
+
+      :persistent_term.put({__MODULE__, ack_ref}, %{
+        redis_instance: redis_instance,
+        list_name: list_name,
+        working_list_name: working_list_name,
+        config: config
+      })
 
       {:ok,
        %{
@@ -65,7 +67,7 @@ defmodule OffBroadway.Redis.RedixClient do
 
   defp delete_messages(messages, ack_ref) do
     receipts = Enum.map(messages, &extract_message_receipt/1)
-    opts = Broadway.TermStorage.get!(ack_ref)
+    opts = :persistent_term.get({__MODULE__, ack_ref})
 
     delete_message_batch(opts.redis_instance, opts.working_list_name, receipts)
   end
